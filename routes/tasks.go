@@ -12,6 +12,5 @@ func Tasks(app *fiber.App, db *gorm.DB) {
 		DB: db,
 	}
 	tasks := app.Group("/tasks")
-	tasks.Get("/", service.Index)
 	tasks.Post("/", service.Store)
 }

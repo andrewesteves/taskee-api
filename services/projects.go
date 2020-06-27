@@ -13,9 +13,9 @@ type ProjectService struct {
 
 // Index list resources
 func (p ProjectService) Index(ctx *fiber.Ctx) {
-	ctx.JSON(fiber.Map{
-		"message": "Projects resources",
-	})
+	var projects []entities.Project
+	p.DB.Preload("Tasks").Where("user_id = ?", ctx.Locals("user").(entities.User).ID).Find(&projects)
+	ctx.JSON(projects)
 }
 
 // Store new resource

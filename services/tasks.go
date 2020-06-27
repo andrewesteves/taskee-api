@@ -11,13 +11,6 @@ type TaskService struct {
 	DB *gorm.DB
 }
 
-// Index list resources
-func (p TaskService) Index(ctx *fiber.Ctx) {
-	ctx.JSON(fiber.Map{
-		"message": "Tasks resources",
-	})
-}
-
 // Store new resource
 func (p TaskService) Store(ctx *fiber.Ctx) {
 	var err error

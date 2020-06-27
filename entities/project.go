@@ -8,4 +8,5 @@ type Project struct {
 	UserID      uint
 	User        User   `json:"user"`
 	Description string `json:"description"`
+	Tasks       []Task `json:"tasks"`
 }
