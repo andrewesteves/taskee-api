@@ -1,6 +1,7 @@
 package main
 
 import (
+	"github.com/andrewesteves/taskee-api/middlewares"
 	"github.com/andrewesteves/taskee-api/routes"
 	"github.com/gofiber/fiber"
 )
@@ -9,6 +10,8 @@ func main() {
 	app := fiber.New()
 	db := Connect()
 	defer db.Close()
+
+	app.Use(middlewares.NewAuth())
 
 	app.Get("/", func(c *fiber.Ctx) {
 		c.JSON(map[string]string{
