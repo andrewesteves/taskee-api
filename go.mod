@@ -2,4 +2,7 @@ module github.com/andrewesteves/taskee-api
 
 go 1.14
 
-require github.com/gofiber/fiber v1.12.0
+require (
+	github.com/gofiber/fiber v1.12.0
+	github.com/jinzhu/gorm v1.9.14
+)
