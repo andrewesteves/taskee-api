@@ -13,4 +13,5 @@ func Projects(app *fiber.App, db *gorm.DB) {
 	}
 	projects := app.Group("/projects")
 	projects.Get("/", service.Index)
+	projects.Post("/", service.Store)
 }

@@ -76,7 +76,6 @@ func (u UserService) Login(ctx *fiber.Ctx) {
 	u.DB.Save(&userDB)
 
 	ctx.JSON(fiber.Map{
-		"user":  ctx.Locals("user"),
 		"token": userDB.Token,
 	})
 }
