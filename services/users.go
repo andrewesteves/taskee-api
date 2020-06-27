@@ -3,6 +3,7 @@ package services
 import (
 	"github.com/andrewesteves/taskee-api/entities"
 	"github.com/andrewesteves/taskee-api/utils"
+	"github.com/andrewesteves/taskee-api/validations"
 	"github.com/gofiber/fiber"
 	"github.com/jinzhu/gorm"
 )
@@ -21,6 +22,11 @@ func (u UserService) Register(ctx *fiber.Ctx) {
 		ctx.Status(503).JSON(fiber.Map{
 			"message": "Whoops! We could not process your request",
 		})
+		return
+	}
+
+	if len(validations.UserRegister(*user)) > 0 {
+		ctx.Status(422).JSON(validations.UserRegister(*user))
 		return
 	}
 
@@ -54,6 +60,11 @@ func (u UserService) Login(ctx *fiber.Ctx) {
 		ctx.Status(503).JSON(fiber.Map{
 			"message": "Whoops! We could not process your request",
 		})
+		return
+	}
+
+	if len(validations.UserLogin(*user)) > 0 {
+		ctx.Status(422).JSON(validations.UserLogin(*user))
 		return
 	}
 

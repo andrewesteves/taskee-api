@@ -2,6 +2,7 @@ package services
 
 import (
 	"github.com/andrewesteves/taskee-api/entities"
+	"github.com/andrewesteves/taskee-api/validations"
 	"github.com/gofiber/fiber"
 	"github.com/jinzhu/gorm"
 )
@@ -27,6 +28,11 @@ func (p ProjectService) Store(ctx *fiber.Ctx) {
 		ctx.Status(503).JSON(fiber.Map{
 			"message": "Whoops! We could not process your request",
 		})
+		return
+	}
+
+	if len(validations.ProjectStore(*project)) > 0 {
+		ctx.Status(422).JSON(validations.ProjectStore(*project))
 		return
 	}
 
