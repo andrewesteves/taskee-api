@@ -1,6 +1,8 @@
 package services
 
 import (
+	"strconv"
+
 	"github.com/andrewesteves/taskee-api/entities"
 	"github.com/andrewesteves/taskee-api/validations"
 	"github.com/gofiber/fiber"
@@ -40,5 +42,60 @@ func (p ProjectService) Store(ctx *fiber.Ctx) {
 	p.DB.Save(&project)
 	ctx.JSON(fiber.Map{
 		"message": "Congratulations you have created a new project",
+	})
+}
+
+// Update a resource
+func (p ProjectService) Update(ctx *fiber.Ctx) {
+	var err error
+	project := new(entities.Project)
+
+	if err = ctx.BodyParser(project); err != nil {
+		ctx.Status(503).JSON(fiber.Map{
+			"message": "Whoops! We could not process your request",
+		})
+		return
+	}
+
+	if len(validations.ProjectStore(*project)) > 0 {
+		ctx.Status(422).JSON(validations.ProjectStore(*project))
+		return
+	}
+
+	id, err := strconv.ParseUint(ctx.Params("id"), 10, 32)
+	if err != nil {
+		ctx.Status(503).JSON(fiber.Map{
+			"message": "Whoops! We could not process your request",
+		})
+		return
+	}
+
+	var projectDB entities.Project
+	p.DB.First(&projectDB, id)
+	p.DB.Model(&projectDB).Update("description", project.Description)
+
+	ctx.JSON(fiber.Map{
+		"message": "You have successfully updated the project",
+	})
+}
+
+// Destroy a resource
+func (p ProjectService) Destroy(ctx *fiber.Ctx) {
+	var err error
+
+	id, err := strconv.ParseUint(ctx.Params("id"), 10, 32)
+	if err != nil {
+		ctx.Status(503).JSON(fiber.Map{
+			"message": "Whoops! We could not process your request",
+		})
+		return
+	}
+
+	var project entities.Project
+	project.ID = uint(id)
+	p.DB.Unscoped().Delete(&project)
+
+	ctx.JSON(fiber.Map{
+		"message": "You have successfully deleted the project",
 	})
 }
