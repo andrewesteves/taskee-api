@@ -19,6 +19,13 @@ func NewAuth(config ConfigAuth) func(*fiber.Ctx) {
 	return func(ctx *fiber.Ctx) {
 		if guard(string(ctx.Fasthttp.Request.URI().PathOriginal()), ctx.Method()) {
 			token := ctx.Fasthttp.Request.Header.Peek("taskee-token")
+
+			if len(token) < 80 {
+				ctx.Status(401).JSON(fiber.Map{
+					"message": "You have an invalid token",
+				})
+			}
+
 			var user entities.User
 			config.DB.Where("token = ?", string(token)).First(&user)
 

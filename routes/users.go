@@ -14,4 +14,5 @@ func Users(app *fiber.App, db *gorm.DB) {
 	users := app.Group("/users")
 	users.Post("/register", service.Register)
 	users.Post("/login", service.Login)
+	users.Post("/logout", service.Logout)
 }

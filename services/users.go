@@ -48,8 +48,9 @@ func (u UserService) Register(ctx *fiber.Ctx) {
 func (u UserService) Login(ctx *fiber.Ctx) {
 	user := new(entities.User)
 	var userDB entities.User
+	var err error
 
-	if err := ctx.BodyParser(user); err != nil {
+	if err = ctx.BodyParser(user); err != nil {
 		ctx.Status(503).JSON(fiber.Map{
 			"message": "Whoops! We could not process your request",
 		})
@@ -65,8 +66,29 @@ func (u UserService) Login(ctx *fiber.Ctx) {
 		return
 	}
 
+	userDB.Token, err = utils.GenerateToken()
+	if err != nil {
+		ctx.Status(503).JSON(fiber.Map{
+			"message": "Whoops! We could not generate your access key",
+		})
+		return
+	}
+	u.DB.Save(&userDB)
+
 	ctx.JSON(fiber.Map{
 		"user":  ctx.Locals("user"),
 		"token": userDB.Token,
+	})
+}
+
+// Logout users
+func (u UserService) Logout(ctx *fiber.Ctx) {
+	user := ctx.Locals("user").(entities.User)
+
+	user.Token = ""
+	u.DB.Save(&user)
+
+	ctx.JSON(fiber.Map{
+		"message": "You are logged out",
 	})
 }
