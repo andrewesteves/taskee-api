@@ -23,6 +23,7 @@ func main() {
 
 	routes.Users(app, db)
 	routes.Projects(app, db)
+	routes.Tasks(app, db)
 
 	app.Listen(3010)
 }
