@@ -18,6 +18,14 @@ func GenerateHash(raw string) (string, error) {
 	return string(hash), nil
 }
 
+// CompareHash hash comparison of raw string
+func CompareHash(hashed, password string) bool {
+	if err := bcrypt.CompareHashAndPassword([]byte(hashed), []byte(password)); err != nil {
+		return false
+	}
+	return true
+}
+
 // GenerateToken random tokens
 func GenerateToken() (string, error) {
 	b := make([]byte, 16)

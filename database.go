@@ -31,4 +31,5 @@ func Connect() *gorm.DB {
 // Migrate tables
 func Migrate(db *gorm.DB) {
 	db.CreateTable(&entities.User{})
+	db.CreateTable(&entities.Project{})
 }
