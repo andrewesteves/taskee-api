@@ -33,6 +33,7 @@ func (t TaskService) Store(ctx *fiber.Ctx) {
 
 	t.DB.Save(&task)
 	ctx.JSON(fiber.Map{
+		"task":    task,
 		"message": "Congratulations you have created a new task",
 	})
 }
