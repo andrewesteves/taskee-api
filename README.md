@@ -2,6 +2,12 @@
 
 ## A task management application.
 
+### Download the dependencies
+
+```bash
+go mod download
+```
+
 ### Get the dependencies
 
 ```bash
