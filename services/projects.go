@@ -95,6 +95,7 @@ func (p ProjectService) Destroy(ctx *fiber.Ctx) {
 	var project entities.Project
 	project.ID = uint(id)
 	p.DB.Unscoped().Delete(&project)
+	p.DB.Unscoped().Where("project_id = ?", project.ID).Delete(&entities.Task{})
 
 	ctx.JSON(fiber.Map{
 		"message": "You have successfully deleted the project",
