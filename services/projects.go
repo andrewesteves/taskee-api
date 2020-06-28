@@ -41,6 +41,7 @@ func (p ProjectService) Store(ctx *fiber.Ctx) {
 	project.UserID = ctx.Locals("user").(entities.User).ID
 	p.DB.Save(&project)
 	ctx.JSON(fiber.Map{
+		"project": project,
 		"message": "Congratulations you have created a new project",
 	})
 }
