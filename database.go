@@ -8,17 +8,14 @@ import (
 	_ "github.com/jinzhu/gorm/dialects/mysql"
 )
 
-const (
-	host = "172.17.0.2"
-	user = "root"
-	pass = "4321"
-	name = "taskee"
-	port = 3306
-)
-
 // Connect to the database
 func Connect() *gorm.DB {
-	conn := fmt.Sprintf("%s:%s@tcp(%s:%d)/%s?charset=utf8&parseTime=True&loc=Local", user, pass, host, port, name)
+	env, err := EnvConfig{}.Vars()
+	if err != nil {
+		panic(err.Error())
+	}
+
+	conn := fmt.Sprintf("%s:%s@tcp(%s:%d)/%s?charset=utf8&parseTime=True&loc=Local", env.DB.User, env.DB.Pass, env.DB.Host, env.DB.Port, env.DB.Name)
 	db, err := gorm.Open("mysql", conn)
 
 	if err != nil {
