@@ -3,6 +3,7 @@ package main
 import (
 	"github.com/andrewesteves/taskee-api/middlewares"
 	"github.com/andrewesteves/taskee-api/routes"
+	"github.com/gofiber/cors"
 	"github.com/gofiber/fiber"
 )
 
@@ -11,6 +12,7 @@ func main() {
 	db := Connect()
 	defer db.Close()
 
+	app.Use(cors.New())
 	app.Use(middlewares.NewAuth(middlewares.ConfigAuth{
 		DB: db,
 	}))
