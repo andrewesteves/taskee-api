@@ -87,6 +87,8 @@ func (u UserService) Login(ctx *fiber.Ctx) {
 	u.DB.Save(&userDB)
 
 	ctx.JSON(fiber.Map{
+		"name":  userDB.Name,
+		"email": userDB.Email,
 		"token": userDB.Token,
 	})
 }
