@@ -30,6 +30,16 @@ func (u UserService) Register(ctx *fiber.Ctx) {
 		return
 	}
 
+	var userDB entities.User
+	u.DB.Where("email = ?", user.Email).First(&userDB)
+
+	if userDB.ID != 0 {
+		ctx.Status(422).JSON(fiber.Map{
+			"message": "We already have a registered user with this e-mail",
+		})
+		return
+	}
+
 	user.Password, err = utils.GenerateHash(user.Password)
 	if err != nil {
 		ctx.Status(503).JSON(fiber.Map{
