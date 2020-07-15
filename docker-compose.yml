@@ -1,0 +1,42 @@
+version: "3"
+services:
+  taskeedb.local.taskee.com:
+    container_name: taskeedb.local.taskee.com
+    image: mysql:5.7
+    restart: always
+    ports:
+      - "3306:3306"
+    env_file: .env
+    volumes:
+      - "./.data/db:/var/lib/mysql"
+    environment:
+      MYSQL_DATABASE: ${DB_NAME}
+      MYSQL_USER: ${DB_USER}
+      MYSQL_PASSWORD: ${DB_PASS}
+      MYSQL_ROOT_PASSWORD: ${DB_PASS}
+    networks:
+      main:
+        aliases:
+          - taskeedb.local.taskee.com
+  taskeeapi.local.taskee.com:
+    container_name: taskeeapi.local.taskee.com
+    depends_on:
+      - taskeedb.local.taskee.com
+    build: .
+    restart: always
+    ports:
+      - "80:80"
+    env_file: .env
+    environment:
+      DB_HOST: ${DB_HOST}
+      DB_NAME: ${DB_NAME}
+      DB_USER: ${DB_USER}
+      DB_PASS: ${DB_PASS}
+      DB_PORT: ${DB_PORT}
+    networks:
+      main:
+        aliases:
+          - taskeeapi.local.taskee.com
+networks:
+  main:
+    driver: bridge
