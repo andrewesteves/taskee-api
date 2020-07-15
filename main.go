@@ -27,5 +27,5 @@ func main() {
 	routes.Projects(app, db)
 	routes.Tasks(app, db)
 
-	app.Listen(3010)
+	app.Listen(80)
 }

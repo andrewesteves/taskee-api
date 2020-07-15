@@ -15,6 +15,6 @@ WORKDIR /main
 COPY ./env.yaml ./env.yaml
 COPY --from=build /go/src/taskee-api/main .
 
-EXPOSE 3010
+EXPOSE 80
 
 CMD ["./main"]
